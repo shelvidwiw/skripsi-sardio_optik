@@ -1,0 +1,274 @@
+<?php $__env->startSection('title', $product->name.' - Sardio Optik'); ?>
+
+<?php $__env->startPush('styles'); ?>
+    <link href="<?php echo e(asset('css/product-detail.css')); ?>" rel="stylesheet">
+<?php $__env->stopPush(); ?>
+
+<?php $__env->startSection('content'); ?>
+<?php
+    $rxType = $product->prescriptionType();
+    $galleryImages = collect($product->images ?? [])->map(fn ($img) => asset('storage/'.$img))->values();
+    if ($galleryImages->isEmpty()) {
+        $galleryImages = collect(['https://images.unsplash.com/photo-1577803645773-f96470509666?w=800&q=80']);
+    }
+?>
+
+<div class="so-detail-page">
+    <div class="so-container">
+
+        <nav class="so-breadcrumb">
+            <a href="<?php echo e(route('home')); ?>">Home</a>
+            <span>&rsaquo;</span>
+            <a href="<?php echo e(route('products.index', ['category' => [$product->category]])); ?>"><?php echo e($product->category); ?></a>
+            <span>&rsaquo;</span>
+            <span class="so-breadcrumb__current"><?php echo e($product->name); ?></span>
+        </nav>
+
+        <div class="so-detail-layout">
+            
+            <div class="so-detail-gallery">
+                <div class="so-detail-gallery__main">
+                    <span class="so-detail-badge">BEST SELLER</span>
+                    <img src="<?php echo e($galleryImages->first()); ?>" alt="<?php echo e($product->name); ?>" id="soDetailMainImage">
+                </div>
+                <?php if($galleryImages->count() > 1): ?>
+                    <div class="so-detail-gallery__thumbs">
+                        <?php $__currentLoopData = $galleryImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <img src="<?php echo e($img); ?>" alt="" class="so-detail-thumb <?php echo e($loop->first ? 'is-active' : ''); ?>" onclick="document.getElementById('soDetailMainImage').src=this.src; document.querySelectorAll('.so-detail-thumb').forEach(t=>t.classList.remove('is-active')); this.classList.add('is-active');">
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            
+            <div class="so-detail-info">
+                <h1><?php echo e($product->name); ?></h1>
+                <div class="so-detail-price-row">
+                    <span class="so-detail-price">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></span>
+                    <span class="so-detail-rating">&#9733;&#9733;&#9733;&#9733;&#9734; (48 Reviews)</span>
+                </div>
+
+                <p class="so-detail-description"><?php echo e($product->description); ?></p>
+
+                <div class="so-detail-colors">
+                    <div class="so-detail-colors__label">FRAME COLOR: <span>MATTE ONYX</span></div>
+                    <div class="so-color-swatches">
+                        <button type="button" class="so-color-swatch is-active" style="background:#12151c;"></button>
+                        <button type="button" class="so-color-swatch" style="background:#1c2a4a;"></button>
+                        <button type="button" class="so-color-swatch" style="background:#aab3c5;"></button>
+                    </div>
+                </div>
+                <p class="so-detail-note">*Pilihan warna masih tampilan saja, belum tersimpan sebagai varian produk terpisah.</p>
+
+                <form action="<?php echo e(route('cart.add', $product)); ?>" method="POST" enctype="multipart/form-data" id="soDetailForm">
+                    <?php echo csrf_field(); ?>
+
+                    <div class="so-detail-qty-row">
+                        <label>Quantity</label>
+                        <div class="so-qty-selector">
+                            <button type="button" class="so-qty-minus" aria-label="Kurangi jumlah">&minus;</button>
+                            <input type="number" name="quantity" id="soDetailQty" value="1" min="1" max="<?php echo e($product->stock); ?>" class="so-qty-input" readonly>
+                            <button type="button" class="so-qty-plus" aria-label="Tambah jumlah">&plus;</button>
+                        </div>
+                    </div>
+
+                    <?php if($rxType): ?>
+                        <div class="so-detail-rx-card">
+                            <h6>Resep <?php echo e($rxType === 'full' ? 'Lensa' : 'Soflens'); ?> <span class="so-required">*</span></h6>
+
+                            <div class="so-rx-method-toggle">
+                                <label class="is-active">
+                                    <input type="radio" name="prescription_method" id="rxManual" value="manual" checked>
+                                    Isi Manual
+                                </label>
+                                <label>
+                                    <input type="radio" name="prescription_method" id="rxUpload" value="upload">
+                                    Upload Resep
+                                </label>
+                            </div>
+
+                            <div id="rxManualFields" class="so-rx-fields">
+                                <div class="so-field-row">
+                                    <div>
+                                        <label class="so-field-label">SPH Kanan (OD)</label>
+                                        <input type="number" step="0.25" name="sph_right" class="so-field-input" placeholder="mis. -1.50">
+                                    </div>
+                                    <div>
+                                        <label class="so-field-label">SPH Kiri (OS)</label>
+                                        <input type="number" step="0.25" name="sph_left" class="so-field-input" placeholder="mis. -1.25">
+                                    </div>
+                                </div>
+
+                                <?php if($rxType === 'full'): ?>
+                                    <div class="so-field-row">
+                                        <div>
+                                            <label class="so-field-label">CYL Kanan</label>
+                                            <input type="number" step="0.25" name="cyl_right" class="so-field-input" placeholder="opsional">
+                                        </div>
+                                        <div>
+                                            <label class="so-field-label">CYL Kiri</label>
+                                            <input type="number" step="0.25" name="cyl_left" class="so-field-input" placeholder="opsional">
+                                        </div>
+                                    </div>
+                                    <div class="so-field-row">
+                                        <div>
+                                            <label class="so-field-label">Axis Kanan</label>
+                                            <input type="number" min="0" max="180" name="axis_right" class="so-field-input" placeholder="0-180">
+                                        </div>
+                                        <div>
+                                            <label class="so-field-label">Axis Kiri</label>
+                                            <input type="number" min="0" max="180" name="axis_left" class="so-field-input" placeholder="0-180">
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <div id="rxUploadField" class="so-rx-fields" style="display:none;">
+                                <label class="so-field-label">Upload Prescription</label>
+                                <input type="file" name="prescription_file" class="so-field-input" accept="image/*,.pdf">
+                            </div>
+
+                            <label class="so-field-label">Catatan (opsional)</label>
+                            <textarea name="prescription_note" rows="2" class="so-field-input" placeholder="mis. nama pasien, kebutuhan khusus"></textarea>
+
+                            <?php $__errorArgs = ['sph_right'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="so-field-error"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <?php $__errorArgs = ['sph_left'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="so-field-error"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <?php $__errorArgs = ['prescription_file'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <p class="so-field-error"><?php echo e($message); ?></p> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+                    <?php else: ?>
+                        
+                        <div class="so-detail-bundle-prompt">
+                            <div>
+                                <strong>Beli dengan lensa?</strong>
+                                <span>Lihat pilihan lensa yang tersedia terpisah</span>
+                            </div>
+                            <a href="<?php echo e(route('products.index', ['category' => [\App\Models\Product::CATEGORY_LENSA]])); ?>" class="so-btn so-btn--outline">Lihat Lensa</a>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="so-detail-info-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        <span>Not sure about your prescription? Get a professional assessment from our certified opticians. <a href="#" onclick="return false;" class="is-disabled" title="Segera hadir">Learn more</a></span>
+                    </div>
+
+                    <a href="#" class="so-btn so-btn--secondary so-btn--block is-disabled" onclick="return false;" title="Segera hadir">Free Online Consultation</a>
+
+                    <div class="so-detail-actions">
+                        <button type="submit" name="buy_now" value="0" class="so-btn so-btn--outline so-btn--block" <?php if($product->stock < 1): ?> disabled <?php endif; ?>>
+                            Add to Cart
+                        </button>
+                        <button type="submit" name="buy_now" value="1" class="so-btn so-btn--primary so-btn--block" <?php if($product->stock < 1): ?> disabled <?php endif; ?>>
+                            Buy Now
+                        </button>
+                    </div>
+                </form>
+
+                <div class="so-detail-trust-row">
+                    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg><span>2-Year Warranty</span></div>
+                    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>Fast Glazing</span></div>
+                    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 8l9-5 9 5"/></svg><span>Free Shipping</span></div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="so-detail-tabs">
+            <button type="button" class="so-detail-tab is-active" data-tab="description">Description</button>
+            <button type="button" class="so-detail-tab" data-tab="reviews">Reviews (48)</button>
+            <button type="button" class="so-detail-tab" data-tab="shipping">Shipping &amp; Returns</button>
+        </div>
+
+        <div class="so-detail-tab-panel" id="tab-description">
+            <div class="so-detail-tab-grid">
+                <div>
+                    <h5>Product Specification</h5>
+                    <table class="so-spec-table">
+                        <tr><td>Category</td><td><?php echo e($product->category); ?></td></tr>
+                        <tr><td>Brand</td><td><?php echo e($product->brand ?? '-'); ?></td></tr>
+                        <tr><td>Stock</td><td><?php echo e($product->stock); ?> unit</td></tr>
+                    </table>
+                    <p class="so-detail-note">*Spesifikasi teknis lain (material, berat, dsb) belum jadi kolom
+                        tersendiri di database — silakan tambahkan di deskripsi produk untuk saat ini.</p>
+                </div>
+                <div>
+                    <h5>Experience Sardio Clarity</h5>
+                    <p><?php echo e($product->description ?: 'Belum ada deskripsi tambahan untuk produk ini.'); ?></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="so-detail-tab-panel" id="tab-reviews" style="display:none;">
+            <p class="so-detail-note">Fitur ulasan/review belum tersedia di Iterasi 1.</p>
+        </div>
+
+        <div class="so-detail-tab-panel" id="tab-shipping" style="display:none;">
+            <p class="so-detail-note">Informasi pengiriman &amp; pengembalian belum tersedia di Iterasi 1.</p>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var qtyInput = document.getElementById('soDetailQty');
+    var maxStock = <?php echo e((int) $product->stock ?: 1); ?>;
+
+    document.querySelector('.so-detail-qty-row .so-qty-minus').addEventListener('click', function () {
+        var value = parseInt(qtyInput.value, 10) || 1;
+        if (value > 1) qtyInput.value = value - 1;
+    });
+    document.querySelector('.so-detail-qty-row .so-qty-plus').addEventListener('click', function () {
+        var value = parseInt(qtyInput.value, 10) || 1;
+        if (value < maxStock) qtyInput.value = value + 1;
+    });
+
+    <?php if($rxType): ?>
+    var manualRadio = document.getElementById('rxManual');
+    var uploadRadio = document.getElementById('rxUpload');
+    var manualFields = document.getElementById('rxManualFields');
+    var uploadField = document.getElementById('rxUploadField');
+
+    function toggleRx() {
+        var isUpload = uploadRadio.checked;
+        manualFields.style.display = isUpload ? 'none' : '';
+        uploadField.style.display = isUpload ? '' : 'none';
+    }
+    manualRadio.addEventListener('change', toggleRx);
+    uploadRadio.addEventListener('change', toggleRx);
+    <?php endif; ?>
+
+    document.querySelectorAll('.so-detail-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.so-detail-tab').forEach(function (t) { t.classList.remove('is-active'); });
+            document.querySelectorAll('.so-detail-tab-panel').forEach(function (p) { p.style.display = 'none'; });
+            tab.classList.add('is-active');
+            document.getElementById('tab-' + tab.dataset.tab).style.display = '';
+        });
+    });
+});
+</script>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\sardio-optik-bismillah\resources\views/products/show.blade.php ENDPATH**/ ?>
