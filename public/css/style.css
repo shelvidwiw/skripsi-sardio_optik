@@ -824,3 +824,57 @@ a.so-service-card {
 .so-btn--dark { background: var(--so-dark); color: #fff; }
 .so-btn--dark:hover { background: #000; color: #fff; }
 
+/* =========================================================
+   TOAST NOTIFICATION (muncul dari kiri bawah, auto-hilang)
+   ========================================================= */
+.so-toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.so-toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    padding: 14px 18px;
+    min-width: 260px;
+    max-width: 360px;
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--so-text);
+    border-left: 4px solid var(--so-primary);
+
+    opacity: 0;
+    transform: translateX(-24px);
+    transition: opacity .25s ease, transform .25s ease;
+    pointer-events: auto;
+}
+
+.so-toast.is-visible { opacity: 1; transform: translateX(0); }
+.so-toast.is-leaving { opacity: 0; transform: translateX(-24px); }
+
+.so-toast--success { border-left-color: #1a8a5f; }
+.so-toast--success .so-toast__icon { color: #1a8a5f; }
+
+.so-toast--error { border-left-color: #c0392b; }
+.so-toast--error .so-toast__icon { color: #c0392b; }
+
+.so-toast--info { border-left-color: var(--so-primary); }
+.so-toast--info .so-toast__icon { color: var(--so-primary); }
+
+.so-toast__icon { flex-shrink: 0; display: flex; }
+.so-toast__icon svg { width: 20px; height: 20px; }
+
+@media (max-width: 576px) {
+    .so-toast-container { left: 12px; right: 12px; bottom: 12px; }
+    .so-toast { max-width: 100%; }
+}

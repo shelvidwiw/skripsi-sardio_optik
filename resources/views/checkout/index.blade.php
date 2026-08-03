@@ -26,6 +26,9 @@
 
                 <form action="{{ route('checkout.store') }}" method="POST" id="soCheckoutForm">
                     @csrf
+                    @foreach(array_keys($cart) as $itemKey)
+                        <input type="hidden" name="selected_items[]" value="{{ $itemKey }}">
+                    @endforeach
 
                     <label class="so-field-label">Full Name</label>
                     <input type="text" name="customer_name" value="{{ old('customer_name') }}" class="so-field-input" placeholder="Johnathan Doe" required>

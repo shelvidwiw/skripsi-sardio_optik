@@ -15,11 +15,11 @@
     <div class="so-hero__overlay"></div>
     <div class="so-container so-hero__content">
         <div class="so-hero__card">
-            <h1>Precision Vision, Defined by Sardio.</h1>
-            <p>Experience clinical accuracy with our new Seasonal Collection. Get up to 30% off on premium prescription lenses this month.</p>
+            <h1>Presisi Penglihatan, Bersama Sardio.</h1>
+            <p>Temukan koleksi kacamata dan lensa berkualitas yang dirancang untuk memberikan kenyamanan serta ketajaman penglihatan dalam setiap aktivitas.</p>
             <div class="so-hero__actions">
-                <a href="{{ route('products.index') }}" class="so-btn so-btn--primary">Shop Collection</a>
-                <a href="#" class="so-btn so-btn--secondary is-disabled" onclick="return false;" title="Segera hadir">Book Eye Test</a>
+                <a href="{{ route('products.index') }}" class="so-btn so-btn--primary">Lihat Koleksi</a>
+                <a href="#" class="so-btn so-btn--secondary is-disabled" onclick="return false;" title="Segera hadir">Pemeriksaan Mata</a>
             </div>
         </div>
     </div>
@@ -28,8 +28,8 @@
 {{-- ============ OUR SPECIALIZED SERVICES ============ --}}
 <section class="so-section">
     <div class="so-container">
-        <h2 class="so-section__title">Our Specialized Services</h2>
-        <p class="so-section__subtitle">Comprehensive optical solutions tailored to your lifestyle.</p>
+        <h2 class="so-section__title">Layanan Unggulan Kami</h2>
+        <p class="so-section__subtitle">Solusi optik yang lengkap dan disesuaikan dengan kebutuhan serta gaya hidup Anda.</p>
 
         <div class="so-services">
             <a href="{{ route('products.index', ['category' => [\App\Models\Product::CATEGORY_FRAME]]) }}" class="so-service-card">
@@ -69,7 +69,7 @@
 {{-- ============ TOP SELLING FRAMES ============ --}}
 <section class="so-section so-section--muted">
     <div class="so-container">
-        <h2 class="so-section__title so-section__title--center">Top Selling Frames</h2>
+        <h2 class="so-section__title so-section__title--center">Koleksi Frame Terlaris</h2>
 
         <div class="so-products-grid">
             @php
@@ -139,14 +139,14 @@
 <section class="so-section">
     <div class="so-container so-style">
         <div class="so-style__text">
-            <h2>Find Your Perfect Style</h2>
-            <p>Eyewear is more than vision—it's an expression of your identity. Our AI-driven style guide helps you match frames with your face shape, lifestyle, and aesthetic preferences.</p>
+            <h2>Temukan Gaya yang Paling Sesuai untuk Anda</h2>
+            <p>Kacamata bukan sekadar alat bantu penglihatan, tetapi juga bagian dari gaya dan kepercayaan diri Anda. Temukan frame yang sesuai dengan bentuk wajah, kebutuhan, dan gaya pribadi Anda.</p>
             <div class="so-style__pills">
                 <span class="so-pill">Square Face</span>
                 <span class="so-pill">Oval Face</span>
                 <span class="so-pill">Heart Shape</span>
             </div>
-            <a href="#" class="so-btn so-btn--primary is-disabled" onclick="return false;" title="Segera hadir">Start Style Quiz &rarr;</a>
+            <a href="#" class="so-btn so-btn--primary is-disabled" onclick="return false;" title="Segera hadir">Mulai Temukan Gaya &rarr;</a>
         </div>
         <div class="so-style__gallery">
             <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80" alt="Style">
@@ -165,29 +165,29 @@
                 <div class="so-trust__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.5 8.7 8 11 4.5-2.3 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
                 </div>
-                <h5>Clinical Precision</h5>
-                <p>Every lens is measured to the millimeter using state-of-the-art optical sensors for 100% accuracy.</p>
+                <h5>Presisi dalam Setiap Lensa</h5>
+                <p>Setiap lensa diproses dengan teliti untuk memberikan kenyamanan dan ketajaman penglihatan sesuai kebutuhan Anda.</p>
             </div>
             <div class="so-trust__item">
                 <div class="so-trust__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.5 8.7 8 11 4.5-2.3 8-6 8-11V5l-8-3Z"/><path d="M12 8v5M12 16h.01"/></svg>
                 </div>
-                <h5>Certified Opticians</h5>
-                <p>Our team consists of board-certified specialists with over 15 years of clinical experience in eye health.</p>
+                <h5>Tenaga Optik Profesional</h5>
+                <p>Tim kami siap membantu Anda memilih frame dan lensa yang tepat serta memberikan pelayanan yang ramah dan profesional.</p>
             </div>
             <div class="so-trust__item">
                 <div class="so-trust__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.5 8.7 8 11 4.5-2.3 8-6 8-11V5l-8-3Z"/></svg>
                 </div>
-                <h5>Secure Consultation</h5>
-                <p>Your vision records are encrypted and stored following the highest healthcare data standards.</p>
+                <h5>Konsultasi yang Nyaman</h5>
+                <p>Layanan konsultasi kami membantu Anda menemukan solusi terbaik untuk kebutuhan penglihatan dengan proses yang mudah dan nyaman.</p>
             </div>
         </div>
 
         <div class="so-cta">
             <div>
-                <h4>Ready for a digital eye consultation?</h4>
-                <p>Book a session with our specialists from the comfort of your home.</p>
+                <h4>Siap Berkonsultasi Mengenai Kesehatan Mata Anda</h4>
+                <p>Konsultasikan kebutuhan penglihatan Anda dengan tim kami tanpa harus datang langsung ke toko.</p>
             </div>
             <a href="#" class="so-btn so-btn--light is-disabled" onclick="return false;" title="Segera hadir">Book Free Consultation</a>
         </div>

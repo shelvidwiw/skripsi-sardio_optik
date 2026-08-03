@@ -52,15 +52,17 @@
 
                 <p class="so-detail-description">{{ $product->description }}</p>
 
-                <div class="so-detail-colors">
-                    <div class="so-detail-colors__label">FRAME COLOR: <span>MATTE ONYX</span></div>
-                    <div class="so-color-swatches">
-                        <button type="button" class="so-color-swatch is-active" style="background:#12151c;"></button>
-                        <button type="button" class="so-color-swatch" style="background:#1c2a4a;"></button>
-                        <button type="button" class="so-color-swatch" style="background:#aab3c5;"></button>
+                @if($product->category !== \App\Models\Product::CATEGORY_CAIRAN_SOFLENS)
+                    <div class="so-detail-colors">
+                        <div class="so-detail-colors__label">FRAME COLOR: <span>MATTE ONYX</span></div>
+                        <div class="so-color-swatches">
+                            <button type="button" class="so-color-swatch is-active" style="background:#12151c;"></button>
+                            <button type="button" class="so-color-swatch" style="background:#1c2a4a;"></button>
+                            <button type="button" class="so-color-swatch" style="background:#aab3c5;"></button>
+                        </div>
                     </div>
-                </div>
-                <p class="so-detail-note">*Pilihan warna masih tampilan saja, belum tersimpan sebagai varian produk terpisah.</p>
+                    <p class="so-detail-note">*Pilihan warna masih tampilan saja, belum tersimpan sebagai varian produk terpisah.</p>
+                @endif
 
                 <form action="{{ route('cart.add', $product) }}" method="POST" enctype="multipart/form-data" id="soDetailForm">
                     @csrf
@@ -137,9 +139,9 @@
                             @error('sph_left') <p class="so-field-error">{{ $message }}</p> @enderror
                             @error('prescription_file') <p class="so-field-error">{{ $message }}</p> @enderror
                         </div>
-                    @else
-                        {{-- Frame & Cairan Soflens tidak butuh resep. Prompt "beli dengan lensa" ini masih
-                             tampilan/saran saja -- belum ada logic bundling produk di Iterasi 1. --}}
+                    @elseif($product->category === \App\Models\Product::CATEGORY_FRAME)
+                        {{-- Prompt "beli dengan lensa" ini masih tampilan/saran saja --
+                             belum ada logic bundling produk di Iterasi 1. --}}
                         <div class="so-detail-bundle-prompt">
                             <div>
                                 <strong>Beli dengan lensa?</strong>
@@ -149,12 +151,9 @@
                         </div>
                     @endif
 
-                    <div class="so-detail-info-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                        <span>Not sure about your prescription? Get a professional assessment from our certified opticians. <a href="#" onclick="return false;" class="is-disabled" title="Segera hadir">Learn more</a></span>
-                    </div>
-
-                    <a href="#" class="so-btn so-btn--secondary so-btn--block is-disabled" onclick="return false;" title="Segera hadir">Free Online Consultation</a>
+                    @if($product->category !== \App\Models\Product::CATEGORY_CAIRAN_SOFLENS)
+                        <a href="#" class="so-btn so-btn--secondary so-btn--block is-disabled" onclick="return false;" title="Segera hadir">Free Online Consultation</a>
+                    @endif
 
                     <div class="so-detail-actions">
                         <button type="submit" name="buy_now" value="0" class="so-btn so-btn--outline so-btn--block" @if($product->stock < 1) disabled @endif>

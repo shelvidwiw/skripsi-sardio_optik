@@ -44,25 +44,27 @@
         </div>
     </header>
 
-    @if(session('success') || session('error') || $errors->any())
+    @if($errors->any())
         <div class="so-container so-flash">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     @endif
+
+    {{-- Data flash success/error dikirim ke toast.js lewat tag ini, bukan alert statis lagi --}}
+    @if(session('success') || session('error'))
+        <script id="soFlashData" type="application/json">
+            {!! json_encode(['success' => session('success'), 'error' => session('error')]) !!}
+        </script>
+    @endif
+
+    {{-- Toast container: notifikasi muncul dari kiri bawah, otomatis hilang --}}
+    <div id="soToastContainer" class="so-toast-container"></div>
 
     <main>
         @yield('content')
@@ -117,6 +119,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/quick-view.js') }}"></script>
+    <script src="{{ asset('js/toast.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

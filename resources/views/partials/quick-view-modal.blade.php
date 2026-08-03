@@ -28,19 +28,13 @@
 
                 <p id="soQuickViewDescription" class="so-modal__desc"></p>
 
-                <div class="so-modal__colors">
+                <div class="so-modal__colors" id="soQuickViewColorsBlock">
                     <div class="so-modal__colors-label">FRAME COLOR: <span id="soQuickViewColorName">MATTE ONYX</span></div>
                     <div class="so-color-swatches">
                         <button type="button" class="so-color-swatch is-active" data-color="Matte Onyx" style="background:#12151c;"></button>
                         <button type="button" class="so-color-swatch" data-color="Deep Navy" style="background:#1c2a4a;"></button>
                         <button type="button" class="so-color-swatch" data-color="Steel Silver" style="background:#aab3c5;"></button>
                     </div>
-                </div>
-
-                <div class="so-modal__tags">
-                    <span class="so-tag">Anti-reflective</span>
-                    <span class="so-tag">Blue Light Filter</span>
-                    <span class="so-tag">UV Protection</span>
                 </div>
 
                 <hr class="so-modal__divider">

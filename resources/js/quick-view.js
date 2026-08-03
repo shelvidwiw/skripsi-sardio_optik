@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var colorSwatches = document.querySelectorAll('.so-color-swatch');
     var colorNameEl = document.getElementById('soQuickViewColorName');
+    var colorsBlockEl = document.getElementById('soQuickViewColorsBlock');
 
     var rxNoteEl = document.getElementById('soQuickViewRxNote');
     var cartRowEl = document.getElementById('soQuickViewCartRow');
@@ -104,6 +105,11 @@ document.addEventListener('DOMContentLoaded', function () {
             cartRowEl.style.display = needsPrescription ? 'none' : '';
         }
         buyNowEl.href = needsPrescription ? dataHolder.dataset.url : '#';
+
+        // Cairan Soflens bukan produk berbentuk frame, jadi pilihan warna frame disembunyikan.
+        if (colorsBlockEl) {
+            colorsBlockEl.style.display = (dataHolder.dataset.category === 'Cairan Soflens') ? 'none' : '';
+        }
 
         qtyInput.value = 1;
         addQuantityField.value = 1;

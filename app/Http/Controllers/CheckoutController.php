@@ -11,12 +11,21 @@ class CheckoutController extends Controller
 {
     const TAX_RATE = 0.11; // PPN 11%
 
-    public function index()
+    public function index(Request $request)
     {
         $cart = session('cart', []);
 
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
+        }
+
+        // Item yang di-checkout adalah yang dicentang di halaman Cart. Kalau tidak ada info
+        // pilihan (mis. akses langsung), fallback ke semua item supaya tetap kompatibel.
+        $selectedKeys = $request->input('selected_items');
+        $cart = $selectedKeys ? collect($cart)->only($selectedKeys)->all() : $cart;
+
+        if (empty($cart)) {
+            return redirect()->route('cart.index')->with('error', 'Pilih dulu produk yang ingin di-checkout.');
         }
 
         $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
@@ -36,10 +45,19 @@ class CheckoutController extends Controller
             'postal_code' => 'nullable|string|max:10',
         ]);
 
-        $cart = session('cart', []);
+        $sessionCart = session('cart', []);
+
+        if (empty($sessionCart)) {
+            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
+        }
+
+        // Hanya proses item yang tadi dicentang & dibawa dari halaman Cart (hidden inputs).
+        // Item lain yang TIDAK dicentang harus tetap ada di cart untuk di-checkout nanti.
+        $selectedKeys = $request->input('selected_items', array_keys($sessionCart));
+        $cart = collect($sessionCart)->only($selectedKeys)->all();
 
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
+            return redirect()->route('cart.index')->with('error', 'Pilih dulu produk yang ingin di-checkout.');
         }
 
         $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
@@ -84,7 +102,10 @@ class CheckoutController extends Controller
         });
 
         // empty the cart
-        session()->forget('cart');
+        // Cuma buang item yang barusan di-checkout dari session cart; item yang tidak
+        // dicentang tetap tersimpan supaya bisa di-checkout lain waktu.
+        $remainingCart = collect($sessionCart)->except($selectedKeys)->all();
+        session(['cart' => $remainingCart]);
 
         // build WhatsApp redirect to admin number, prefilled with order summary
         $adminNumber = env('ADMIN_WHATSAPP_NUMBER', '6281234567890');

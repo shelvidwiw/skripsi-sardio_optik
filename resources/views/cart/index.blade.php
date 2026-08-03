@@ -25,68 +25,85 @@
             </div>
         @else
             <div class="so-cart-layout">
-                <div class="so-cart-items">
-                    @foreach($cart as $key => $item)
-                        <div class="so-cart-item">
-                            <div class="so-cart-item__image">
-                                @if(!empty($item['image']))
-                                    <img src="{{ asset('storage/'.$item['image']) }}" alt="{{ $item['name'] }}">
-                                @else
-                                    <img src="https://images.unsplash.com/photo-1577803645773-f96470509666?w=300&q=80" alt="{{ $item['name'] }}">
-                                @endif
-                            </div>
+                <div>
+                    <label class="so-cart-select-all">
+                        <input type="checkbox" id="soCartSelectAll" checked>
+                        Pilih Semua ({{ count($cart) }} produk)
+                    </label>
 
-                            <div class="so-cart-item__body">
-                                <div class="so-cart-item__top">
-                                    <div>
-                                        <a href="#" class="so-cart-item__name">{{ $item['name'] }}</a>
-                                        @if(!empty($item['prescription']))
-                                            @php $rx = $item['prescription']; @endphp
-                                            <div class="so-cart-item__variant">
-                                                @if($rx['method'] === 'upload')
-                                                    Resep: file terupload
-                                                @else
-                                                    Resep: OD {{ $rx['sph_right'] ?? '-' }} / OS {{ $rx['sph_left'] ?? '-' }}
-                                                    @if($rx['type'] === 'full')
-                                                        (Cyl {{ $rx['cyl_right'] ?? '-' }} / {{ $rx['cyl_left'] ?? '-' }})
+                    <div class="so-cart-items">
+                        @foreach($cart as $key => $item)
+                            <div class="so-cart-item">
+                                <label class="so-cart-item__check">
+                                    <input type="checkbox"
+                                           class="so-cart-item-checkbox"
+                                           value="{{ $key }}"
+                                           data-price="{{ $item['price'] }}"
+                                           data-qty="{{ $item['quantity'] }}"
+                                           checked>
+                                </label>
+
+                                <div class="so-cart-item__image">
+                                    @if(!empty($item['image']))
+                                        <img src="{{ asset('storage/'.$item['image']) }}" alt="{{ $item['name'] }}">
+                                    @else
+                                        <img src="https://images.unsplash.com/photo-1577803645773-f96470509666?w=300&q=80" alt="{{ $item['name'] }}">
+                                    @endif
+                                </div>
+
+                                <div class="so-cart-item__body">
+                                    <div class="so-cart-item__top">
+                                        <div>
+                                            <a href="#" class="so-cart-item__name">{{ $item['name'] }}</a>
+                                            @if(!empty($item['prescription']))
+                                                @php $rx = $item['prescription']; @endphp
+                                                <div class="so-cart-item__variant">
+                                                    @if($rx['method'] === 'upload')
+                                                        Resep: file terupload
+                                                    @else
+                                                        Resep: OD {{ $rx['sph_right'] ?? '-' }} / OS {{ $rx['sph_left'] ?? '-' }}
+                                                        @if($rx['type'] === 'full')
+                                                            (Cyl {{ $rx['cyl_right'] ?? '-' }} / {{ $rx['cyl_left'] ?? '-' }})
+                                                        @endif
                                                     @endif
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <form action="{{ route('cart.remove', $key) }}" method="POST" class="so-cart-item__remove-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="so-cart-item__remove" aria-label="Hapus produk" title="Hapus">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-                                        </button>
-                                    </form>
-                                </div>
-
-                                <div class="so-cart-item__bottom">
-                                    <form action="{{ route('cart.update', $key) }}" method="POST" class="so-qty-form">
-                                        @csrf
-                                        @method('PATCH')
-                                        <div class="so-qty-selector">
-                                            <button type="button" class="so-qty-minus" aria-label="Kurangi jumlah">&minus;</button>
-                                            <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="so-qty-input" readonly>
-                                            <button type="button" class="so-qty-plus" aria-label="Tambah jumlah">&plus;</button>
+                                                </div>
+                                            @endif
                                         </div>
-                                    </form>
-                                    <span class="so-cart-item__price">Rp {{ number_format($item['price'], 0, ',', '.') }}</span>
+                                        <form action="{{ route('cart.remove', $key) }}" method="POST" class="so-cart-item__remove-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="so-cart-item__remove" aria-label="Hapus produk" title="Hapus">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <div class="so-cart-item__bottom">
+                                        <form action="{{ route('cart.update', $key) }}" method="POST" class="so-qty-form">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="so-qty-selector">
+                                                <button type="button" class="so-qty-minus" aria-label="Kurangi jumlah">&minus;</button>
+                                                <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="so-qty-input" readonly>
+                                                <button type="button" class="so-qty-plus" aria-label="Tambah jumlah">&plus;</button>
+                                            </div>
+                                        </form>
+                                        <span class="so-cart-item__price">Rp {{ number_format($item['price'], 0, ',', '.') }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
 
                 <div>
                     <div class="so-cart-summary">
                         <h5>Ringkasan Pesanan</h5>
+                        <p class="so-cart-summary__selected-count" id="soCartSelectedCount"></p>
 
                         <div class="so-cart-summary__row">
                             <span>Subtotal</span>
-                            <span>Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
+                            <span id="soCartSubtotal">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
                         </div>
                         <div class="so-cart-summary__row">
                             <span>Biaya Pengiriman</span>
@@ -94,20 +111,20 @@
                         </div>
                         <div class="so-cart-summary__row">
                             <span>Pajak (PPN 11%)</span>
-                            <span>Rp {{ number_format(round($subtotal * 0.11), 0, ',', '.') }}</span>
+                            <span id="soCartTax">Rp {{ number_format(round($subtotal * 0.11), 0, ',', '.') }}</span>
                         </div>
 
                         <hr>
 
                         <div class="so-cart-summary__row so-cart-summary__row--total">
                             <span>Total Pesanan</span>
-                            <span>Rp {{ number_format($subtotal + round($subtotal * 0.11), 0, ',', '.') }}</span>
+                            <span id="soCartTotal">Rp {{ number_format($subtotal + round($subtotal * 0.11), 0, ',', '.') }}</span>
                         </div>
 
-                        <a href="{{ route('checkout.index') }}" class="so-btn so-btn--primary so-btn--block so-cart-checkout-btn">
+                        <button type="button" id="soCartCheckoutBtn" class="so-btn so-btn--primary so-btn--block so-cart-checkout-btn">
                             CHECKOUT NOW
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                        </a>
+                        </button>
 
                         <div class="so-cart-trust">
                             <div class="so-cart-trust__item">
@@ -146,6 +163,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // ===== Quantity stepper (tiap item) =====
     document.querySelectorAll('.so-qty-form').forEach(function (form) {
         var input = form.querySelector('.so-qty-input');
         var minus = form.querySelector('.so-qty-minus');
@@ -163,6 +181,76 @@ document.addEventListener('DOMContentLoaded', function () {
             input.value = value + 1;
             form.submit();
         });
+    });
+
+    // ===== Checkbox pilih produk (kayak Shopee): centang -> ringkasan & total ikut update =====
+    var selectAll = document.getElementById('soCartSelectAll');
+    var itemCheckboxes = document.querySelectorAll('.so-cart-item-checkbox');
+    var subtotalEl = document.getElementById('soCartSubtotal');
+    var taxEl = document.getElementById('soCartTax');
+    var totalEl = document.getElementById('soCartTotal');
+    var selectedCountEl = document.getElementById('soCartSelectedCount');
+    var checkoutBtn = document.getElementById('soCartCheckoutBtn');
+
+    function formatRupiah(num) {
+        return 'Rp ' + Math.round(num).toLocaleString('id-ID');
+    }
+
+    function recalculate() {
+        var subtotal = 0;
+        var selectedCount = 0;
+
+        itemCheckboxes.forEach(function (cb) {
+            if (cb.checked) {
+                subtotal += parseFloat(cb.dataset.price) * parseInt(cb.dataset.qty, 10);
+                selectedCount++;
+            }
+        });
+
+        var tax = Math.round(subtotal * 0.11);
+        var total = subtotal + tax;
+
+        subtotalEl.textContent = formatRupiah(subtotal);
+        taxEl.textContent = formatRupiah(tax);
+        totalEl.textContent = formatRupiah(total);
+        selectedCountEl.textContent = selectedCount + ' dari ' + itemCheckboxes.length + ' produk dipilih';
+
+        selectAll.checked = selectedCount === itemCheckboxes.length;
+        selectAll.indeterminate = selectedCount > 0 && selectedCount < itemCheckboxes.length;
+    }
+
+    selectAll.addEventListener('change', function () {
+        itemCheckboxes.forEach(function (cb) { cb.checked = selectAll.checked; });
+        recalculate();
+    });
+
+    itemCheckboxes.forEach(function (cb) {
+        cb.addEventListener('change', recalculate);
+    });
+
+    recalculate();
+
+    // ===== Checkout hanya untuk produk yang dicentang =====
+    checkoutBtn.addEventListener('click', function () {
+        var selectedKeys = [];
+        itemCheckboxes.forEach(function (cb) {
+            if (cb.checked) selectedKeys.push(cb.value);
+        });
+
+        if (selectedKeys.length === 0) {
+            if (window.soShowToast) {
+                soShowToast('Pilih minimal 1 produk untuk checkout.', 'error');
+            } else {
+                alert('Pilih minimal 1 produk untuk checkout.');
+            }
+            return;
+        }
+
+        var params = selectedKeys.map(function (key) {
+            return 'selected_items[]=' + encodeURIComponent(key);
+        }).join('&');
+
+        window.location.href = '{{ route('checkout.index') }}?' + params;
     });
 });
 </script>
