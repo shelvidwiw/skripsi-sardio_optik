@@ -1,0 +1,55 @@
+.so-auth-page { padding: 60px 0 90px; display: flex; justify-content: center; }
+
+.so-auth-card {
+    background: #fff; border: 1px solid var(--so-border); border-radius: var(--so-radius);
+    padding: 40px; width: 100%; max-width: 420px; box-shadow: var(--so-shadow);
+}
+
+.so-auth-card__head { text-align: center; margin-bottom: 28px; }
+.so-auth-card__head h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+.so-auth-card__head p { color: var(--so-text-muted); font-size: .9rem; margin: 0; }
+
+.so-field-label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 8px; }
+.so-field-input {
+    width: 100%; border: 1px solid var(--so-border); border-radius: 8px; padding: 12px 14px;
+    font-family: inherit; font-size: .92rem; margin-bottom: 20px; box-sizing: border-box;
+}
+.so-field-input:focus { outline: none; border-color: var(--so-primary); }
+
+.so-auth-card__footer { text-align: center; margin-top: 20px; font-size: .88rem; color: var(--so-text-muted); }
+.so-auth-card__footer a { color: var(--so-primary); font-weight: 600; }
+
+.so-auth-check { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: .88rem; color: var(--so-text-muted); }
+
+/* ===== Account page ===== */
+.so-account-page { padding: 40px 0 90px; }
+
+.so-account-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 14px; }
+.so-account-head h1 { font-size: 1.6rem; font-weight: 700; margin: 0 0 4px; }
+.so-account-head p { color: var(--so-text-muted); margin: 0; font-size: .92rem; }
+
+.so-account-card {
+    background: #fff; border: 1px solid var(--so-border); border-radius: var(--so-radius);
+    padding: 26px; margin-bottom: 24px;
+}
+.so-account-card h5 { font-weight: 700; margin-bottom: 4px; }
+
+.so-account-orders-empty { color: var(--so-text-muted); font-size: .92rem; text-align: center; padding: 30px 0; }
+
+.so-order-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 16px 0; border-bottom: 1px solid var(--so-border); flex-wrap: wrap;
+}
+.so-order-row:last-child { border-bottom: none; }
+.so-order-row__code { font-weight: 700; font-size: .92rem; }
+.so-order-row__meta { color: var(--so-text-muted); font-size: .82rem; margin-top: 2px; }
+.so-order-row__total { font-weight: 700; }
+
+.so-order-status {
+    display: inline-block; font-size: .76rem; font-weight: 700; padding: 4px 12px; border-radius: 50px;
+    text-transform: capitalize;
+}
+.so-order-status--pending { background: #FFF3CD; color: #8A6D3B; }
+.so-order-status--diproses { background: #D9E7FB; color: var(--so-primary-dark); }
+.so-order-status--selesai { background: #D4EDDA; color: #1E7E34; }
+.so-order-status--dibatalkan { background: #F8D7DA; color: #A02A2A; }

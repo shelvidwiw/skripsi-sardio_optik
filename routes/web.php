@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EyeExamController;
@@ -36,6 +38,19 @@ Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.s
 // Pemeriksaan Mata: halaman tersendiri, bukan produk — booking jadwal periksa mata, bukan checkout cart.
 Route::get('/pemeriksaan-mata', [EyeExamController::class, 'index'])->name('eye-exam.index');
 Route::post('/pemeriksaan-mata', [EyeExamController::class, 'store'])->name('eye-exam.store');
+
+// ===== CUSTOMER AUTH (register, login, logout, akun) =====
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [CustomerAuthController::class, 'register'])->name('register.submit');
+    Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [CustomerAuthController::class, 'login'])->name('login.submit');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
+    Route::get('/akun', [AccountController::class, 'index'])->name('account.index');
+});
 
 // ===== ADMIN =====
 Route::prefix('admin')->name('admin.')->group(function () {

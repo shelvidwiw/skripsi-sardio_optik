@@ -37,9 +37,15 @@
                         <span class="so-icon-btn__badge">{{ $cartCount }}</span>
                     @endif
                 </a>
-                <button type="button" class="so-icon-btn is-disabled" onclick="return false;" title="Segera hadir" aria-label="User">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-                </button>
+                @auth
+                    <a href="{{ route('account.index') }}" class="so-icon-btn" title="Akun Saya" aria-label="Akun Saya">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="so-icon-btn" title="Masuk / Daftar" aria-label="Masuk / Daftar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    </a>
+                @endauth
             </div>
         </div>
     </header>

@@ -31,7 +31,7 @@
                     @endforeach
 
                     <label class="so-field-label">Full Name</label>
-                    <input type="text" name="customer_name" value="{{ old('customer_name') }}" class="so-field-input" placeholder="Johnathan Doe" required>
+                    <input type="text" name="customer_name" value="{{ old('customer_name', auth()->user()->name ?? '') }}" class="so-field-input" placeholder="Johnathan Doe" required>
 
                     <label class="so-field-label">Street Address</label>
                     <input type="text" name="street_address" value="{{ old('street_address') }}" class="so-field-input" placeholder="123 Clarity Avenue">

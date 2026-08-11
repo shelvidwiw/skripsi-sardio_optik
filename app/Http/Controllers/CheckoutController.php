@@ -66,6 +66,7 @@ class CheckoutController extends Controller
 
         $order = DB::transaction(function () use ($request, $cart, $subtotal, $tax, $grandTotal) {
             $order = Order::create([
+                'user_id' => auth()->id(),
                 'order_code' => Order::generateOrderCode(),
                 'customer_name' => $request->customer_name,
                 'whatsapp_number' => $request->whatsapp_number,
