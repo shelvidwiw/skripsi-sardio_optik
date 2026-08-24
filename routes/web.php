@@ -7,11 +7,15 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EyeExamController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StoreController;
+use App\Http\Controllers\TrackOrderController;
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EyeExamBookingController as AdminEyeExamBookingController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +43,14 @@ Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.s
 Route::get('/pemeriksaan-mata', [EyeExamController::class, 'index'])->name('eye-exam.index');
 Route::post('/pemeriksaan-mata', [EyeExamController::class, 'store'])->name('eye-exam.store');
 
+// Halaman info toko fisik (dulu link "Store" di navbar berstatus "Segera hadir").
+Route::get('/toko', [StoreController::class, 'index'])->name('store.index');
+
+// Lacak pesanan tanpa login: cocokkan Kode Order + Nomor WhatsApp (dulu ikon
+// tracking di navbar & "Track Order" di footer berstatus "Segera hadir").
+Route::get('/lacak-pesanan', [TrackOrderController::class, 'index'])->name('track-order.index');
+Route::post('/lacak-pesanan', [TrackOrderController::class, 'track'])->name('track-order.track');
+
 // ===== CUSTOMER AUTH (register, login, logout, akun) =====
 Route::middleware('guest')->group(function () {
     Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('register');
@@ -50,6 +62,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
     Route::get('/akun', [AccountController::class, 'index'])->name('account.index');
+    Route::patch('/akun', [AccountController::class, 'update'])->name('account.update');
 });
 
 // ===== ADMIN =====
@@ -73,6 +86,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])->name('products.destroy');
 
         Route::get('/eye-exam-bookings', [AdminEyeExamBookingController::class, 'index'])->name('eye-exam-bookings.index');
+        Route::get('/eye-exam-bookings/{eyeExamBooking}', [AdminEyeExamBookingController::class, 'show'])->name('eye-exam-bookings.show');
         Route::patch('/eye-exam-bookings/{eyeExamBooking}/status', [AdminEyeExamBookingController::class, 'updateStatus'])->name('eye-exam-bookings.updateStatus');
+
+        Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
+        Route::get('/customers/{customer}', [AdminCustomerController::class, 'show'])->name('customers.show');
+
+        Route::get('/settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
+        Route::patch('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
     });
 });

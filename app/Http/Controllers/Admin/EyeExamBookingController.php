@@ -25,6 +25,11 @@ class EyeExamBookingController extends Controller
         return view('admin.eye-exam-bookings.index', compact('bookings'));
     }
 
+    public function show(EyeExamBooking $eyeExamBooking)
+    {
+        return view('admin.eye-exam-bookings.show', ['booking' => $eyeExamBooking]);
+    }
+
     public function updateStatus(Request $request, EyeExamBooking $eyeExamBooking)
     {
         $request->validate([

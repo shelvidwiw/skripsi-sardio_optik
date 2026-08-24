@@ -2,52 +2,51 @@
 
 @section('title', 'Order Management - Admin Sardio Optik')
 
+@section('breadcrumb')
+    <span class="is-current">Orders</span>
+@endsection
+
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0">Order Management</h3>
-        <form method="GET" class="d-flex gap-2">
-            <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm" placeholder="Cari nama / kode order">
-            <button class="btn btn-sm btn-outline-secondary">Cari</button>
+    <div class="admin-page-head">
+        <div>
+            <h1>Order Management</h1>
+            <p>Kelola semua pesanan pelanggan di sini.</p>
+        </div>
+        <form method="GET" class="admin-search-form">
+            <input type="text" name="search" value="{{ request('search') }}" class="admin-input" placeholder="Cari nama / kode order">
+            <button class="admin-btn admin-btn--outline">Cari</button>
         </form>
     </div>
 
-    <div class="card">
-        <table class="table mb-0 align-middle">
-            <thead>
-                <tr>
-                    <th>ID Order</th>
-                    <th>Customer</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Tanggal</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($orders as $order)
+    <div class="admin-card">
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
                     <tr>
-                        <td>{{ $order->order_code }}</td>
-                        <td>{{ $order->customer_name }}</td>
-                        <td>Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
-                        <td>
-                            @php
-                                $badge = [
-                                    'pending' => 'warning',
-                                    'diproses' => 'info',
-                                    'selesai' => 'success',
-                                    'dibatalkan' => 'danger',
-                                ][$order->status] ?? 'secondary';
-                            @endphp
-                            <span class="badge bg-{{ $badge }}">{{ ucfirst($order->status) }}</span>
-                        </td>
-                        <td>{{ $order->created_at->format('d M Y') }}</td>
-                        <td><a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-outline-primary">Detail</a></td>
+                        <th>ID Order</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
+                        <th></th>
                     </tr>
-                @empty
-                    <tr><td colspan="6" class="text-center text-muted py-4">Belum ada order.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse($orders as $order)
+                        <tr>
+                            <td>{{ $order->order_code }}</td>
+                            <td>{{ $order->customer_name }}</td>
+                            <td>Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
+                            <td>@include('admin.partials.status-badge', ['status' => $order->status])</td>
+                            <td class="text-muted-cell">{{ $order->created_at->format('d M Y') }}</td>
+                            <td><a href="{{ route('admin.orders.show', $order) }}" class="admin-btn admin-btn--outline admin-btn--sm">Detail</a></td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="6" class="admin-table-empty">Belum ada order.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="mt-3">
